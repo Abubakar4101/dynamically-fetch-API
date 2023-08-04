@@ -33,6 +33,7 @@ export default function Home() {
                   <div key={product.id} className="flex rounded-3xl flex-col justify-center items-center gap-4 w-[250px] p-4 bg-base-100 shadow-md">
                       <p className="text-2xl font-bold">{product.name}</p>
                       <p><span className="font-bold">Price: </span> ${product.price}</p>
+
                   </div>
               ))}
           </div>
