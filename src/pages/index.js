@@ -7,6 +7,7 @@ export default function Home() {
     const [isLoading, setIsLoading] = useState(false)
     const [modal, showModal] = useState("hidden")
     const [alert, showAlert] = useState("hidden")
+    const [alertText, setAlertText] = useState("")
     const [update, setUpdate] = useState(false)
     const [product, setProduct] = useState({})
 
@@ -33,7 +34,14 @@ export default function Home() {
     function createProduct() {
         const productName = document.getElementById('name').value
         const productPrice = document.getElementById('price').value
-        if(!productName || !productPrice)  return showAlert(" ")
+        if(!productName || !productPrice) {
+            setAlertText("Fields values are missing.")
+            return showAlert(" ")
+        }
+        else if(productPrice < 0){
+            setAlertText("Price can't be negative.")
+            return showAlert(" ")
+        }
         showModal("hidden")
         fetch(("https://64cb4d16700d50e3c705ad07.mockapi.io/products"),{
             method: 'POST',
@@ -113,7 +121,7 @@ export default function Home() {
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                                         d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                               </svg>
-                              <span>Fields values are missing.</span>
+                              <span>{alertText}</span>
                               <div>
                                   <button className="btn btn-sm" onClick={() => showAlert('hidden')}>OK</button>
                               </div>
