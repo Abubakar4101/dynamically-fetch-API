@@ -5,12 +5,27 @@ import {DeleteIcon, EditIcon} from "@/components/Icons";
 export default function Home() {
     const [products, setProducts] = useState([])
     const [isLoading, setIsLoading] = useState(false)
-    const [modal, showModal] = useState("hidden")
+    const [modalHide, setModalHide] = useState(" ")
     const [alert, showAlert] = useState("hidden")
     const [alertText, setAlertText] = useState("")
     const [update, setUpdate] = useState(false)
     const [product, setProduct] = useState({})
 
+    const validateFields = () => {
+        const productName = document.getElementById('name').value
+        const productPrice = document.getElementById('price').value
+        if(!productName || !productPrice) {
+            setAlertText("Fields values are missing.")
+             showAlert(" ")
+            return false
+        }
+        else if(productPrice < 0){
+            setAlertText("Price can't be negative.")
+            showAlert(" ")
+            return false
+        }
+        else return true
+    }
     const fetchData = () => {
         fetch(("https://64cb4d16700d50e3c705ad07.mockapi.io/products"),{
             method: 'GET',
@@ -32,17 +47,8 @@ export default function Home() {
 
     }
     function createProduct() {
-        const productName = document.getElementById('name').value
-        const productPrice = document.getElementById('price').value
-        if(!productName || !productPrice) {
-            setAlertText("Fields values are missing.")
-            return showAlert(" ")
-        }
-        else if(productPrice < 0){
-            setAlertText("Price can't be negative.")
-            return showAlert(" ")
-        }
-        showModal("hidden")
+        if(!validateFields()) return
+        setModalHide("my_modal_6")
         fetch(("https://64cb4d16700d50e3c705ad07.mockapi.io/products"),{
             method: 'POST',
             headers: {
@@ -50,13 +56,12 @@ export default function Home() {
                 accept: 'application/json'
             },
             body: JSON.stringify({
-                name: productName,
-                price: productPrice
+                name: document.getElementById('name').value,
+                price: document.getElementById('price').value
             })
         }).then(() => {
             fetchData()
-           document.getElementById('name').value = ''
-           document.getElementById('price').value = ''
+            resetALl()
         })
     }
 
@@ -73,7 +78,8 @@ export default function Home() {
     }
 
     function updateProduct(product) {
-        showModal("hidden")
+        if(!validateFields()) return
+        setModalHide("my_modal_6")
         fetch((`https://64cb4d16700d50e3c705ad07.mockapi.io/products/${product.id}`),{
             method: 'PUT',
             headers: {
@@ -85,11 +91,8 @@ export default function Home() {
                 price: document.getElementById('price').value
             })
         }).then((r) => {
-                showModal("hidden")
                 fetchData()
-                setUpdate(false)
-                document.getElementById('name').value = ''
-                document.getElementById('price').value = ''
+                resetALl()
         })
 
     }
@@ -97,11 +100,16 @@ export default function Home() {
     function editProduct(product) {
         setUpdate(true)
         setProduct(product)
-        showModal(" ")
         document.getElementById('name').value = product.name
         document.getElementById('price').value = product.price
     }
-
+    function resetALl() {
+        setUpdate(false)
+        setProduct({})
+        document.getElementById('name').value = ''
+        document.getElementById('price').value = ''
+        setModalHide(" ")
+    }
     return (
       <>
 
@@ -110,9 +118,9 @@ export default function Home() {
               <button className="btn btn-neutral" onClick={showAllProducts}>
                     Show Products
               </button>
-              <label htmlFor="my_modal_6" className="btn" onClick={() => showModal(" ")}>Create Product</label>
+              <label htmlFor="my_modal_6" className="btn">Create Product</label>
               <input type="checkbox" id="my_modal_6" className="modal-toggle" />
-              <div className={`modal ${modal}`}>
+              <div className={`modal`}>
                   <div className="modal-box flex flex-col justify-center items-center">
                       <div className={`p-5 ${alert}`}>
                           <div className="alert">
@@ -142,16 +150,16 @@ export default function Home() {
                       </div>
                       <div className="flex justify-center items-end gap-4">
                           {update ? (
-                              <div className="modal-action">
-                                  <label htmlFor="my_modal_6" className="btn btn-neutral"  onClick={() => updateProduct(product)}>Update</label>
+                              <div>
+                                  <label htmlFor={`${modalHide}`} className="btn btn-neutral"  onClick={() => updateProduct(product)}>Update</label>
                               </div>
                           ): (
-                              <div className="modal-action">
-                                  <label htmlFor="my_modal_6" className="btn btn-neutral" onClick={createProduct}>Create</label>
+                              <div>
+                                  <label htmlFor={`${modalHide}`} className="btn btn-neutral" onClick={createProduct}>Create</label>
                               </div>
                           )}
                           <div className="modal-action">
-                              <label htmlFor="my_modal_6" className="btn">Cancel</label>
+                              <label htmlFor="my_modal_6" className="btn" onClick={resetALl}>Cancel</label>
                           </div>
                       </div>
                   </div>
