@@ -112,8 +112,6 @@ export default function Home() {
     }
     return (
       <>
-
-
           <div className="flex justify-center gap-8 pt-5">
               <button className="btn btn-neutral" onClick={showAllProducts}>
                     Show Products
