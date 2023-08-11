@@ -1,6 +1,8 @@
 'use client'
 import {useState} from "react";
 import {DeleteIcon, EditIcon} from "@/components/Icons";
+import Head from "next/head";
+
 
 export default function Home() {
     const [products, setProducts] = useState([])
@@ -112,6 +114,13 @@ export default function Home() {
     }
     return (
       <>
+          <Head>
+              <title>Real Fetch</title>
+              <script async
+                      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9014256326835255"
+                      crossOrigin="anonymous">
+              </script>
+          </Head>
           <div className="flex justify-center gap-8 pt-5">
               <button className="btn btn-neutral" onClick={showAllProducts}>
                     Show Products

@@ -9,6 +9,10 @@ export default function App({ Component, pageProps }) {
       <>
           <Head>
               <title>Real Fetch</title>
+              <script async
+                      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9014256326835255"
+                      crossOrigin="anonymous">
+              </script>
           </Head>
           <main className={`${exo.className}`}>
             <Component {...pageProps} />
